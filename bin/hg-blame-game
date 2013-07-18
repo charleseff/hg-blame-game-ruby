@@ -13,8 +13,8 @@ OptionParser.new do |opts|
   opts.separator ""
   opts.separator "Options:"
 
-  opts.on("-s", "--sha", "--SHA [SHA]", String, "Set initial SHA (defaults to HEAD)") do |sha|
-    options[:sha] = sha
+  opts.on("-r", "--rev", "--REV [REV]", String, "Set initial revision (defaults to tip)") do |rev|
+    options[:changeset_id] = rev
   end
 
   opts.on_tail("-h", "--help", "Show this message") do

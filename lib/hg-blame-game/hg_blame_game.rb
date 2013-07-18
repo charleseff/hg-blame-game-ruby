@@ -1,17 +1,18 @@
 class HgBlameGame
   def initialize(path_to_file, opts={})
     @path_to_file = path_to_file
-    @changeset_id = !opts[:changeset_id].nil? ? opts[:changeset_id] : 'HEAD'
+    @changeset_id = !opts[:changeset_id].nil? ? opts[:changeset_id] : 'tip'
   end
 
   def run
     loop do
       p_flush("\n")
 
-      changeset_id_to_show = show_git_blame_and_prompt_for_changeset_id
+      changeset_id_to_show = show_hg_blame_and_prompt_for_changeset_id
 
       p_flush("\n")
-      files_changed = `git show --pretty="format:" --name-only #{changeset_id_to_show}`.split("\n")[1..-1]
+
+      files_changed = sys("hg status --change #{changeset_id_to_show}").split("\n").map { |g| g.split(' ').last }
 
       @path_to_file = prompt_for_file(files_changed, changeset_id_to_show)
       @changeset_id = "#{changeset_id_to_show}^"
@@ -19,11 +20,17 @@ class HgBlameGame
   end
 
   private
-  def show_git_blame_and_prompt_for_changeset_id
-    git_blame_out = `#{git_blame_cmd}`
+
+  def sys(cmd)
+    puts "Executing: #{cmd}" if ENV['DEBUG']
+    `#{cmd}`
+  end
+
+  def show_hg_blame_and_prompt_for_changeset_id
+    hg_blame_out = sys hg_blame_cmd
     exit $?.exitstatus unless $?.success?
-    changeset_id_list = get_changeset_id_list(git_blame_out)
-    print_git_blame_and_prompt
+    changeset_id_list = get_changeset_id_list(hg_blame_out)
+    print_hg_blame_and_prompt
     prompt_for_changeset_id(changeset_id_list)
   end
 
@@ -39,7 +46,7 @@ class HgBlameGame
       end
 
       if input == 'r'
-        print_git_blame_and_prompt
+        print_hg_blame_and_prompt
       elsif input == 'h'
         p_flush prompt_for_changeset_id_message(changeset_ids.count)
       else
@@ -48,19 +55,19 @@ class HgBlameGame
     end
   end
 
-  def print_git_blame_and_prompt
-    system git_blame_cmd
+  def print_hg_blame_and_prompt
+    system hg_blame_cmd
     p_flush "\n" + simple_prompt
   end
 
-  def git_blame_cmd
+  def hg_blame_cmd
     "hg  blame --rev #{@changeset_id} --verbose --user --line-number --changeset #{@path_to_file}"
   end
 
   HG_BLAME_REGEX = / ([^\: ]+):/
 
-  def get_changeset_id_list(git_blame_out)
-    git_blame_out.strip.split("\n").map { |line| line[HG_BLAME_REGEX, 1] }
+  def get_changeset_id_list(hg_blame_out)
+    hg_blame_out.strip.split("\n").map { |line| line[HG_BLAME_REGEX, 1] }
   end
 
   def prompt_for_file(files_changed, changeset_id)
@@ -70,7 +77,7 @@ class HgBlameGame
       input = $stdin.gets.strip
       if input == 'q'
         p_flush "\n" + color("The responsible commit is:") + "\n\n"
-        system "git log #{changeset_id} -n 1"
+        system "hg log --rev #{changeset_id}"
         exit 0
       end
       return @path_to_file if input == 's'
@@ -92,7 +99,7 @@ class HgBlameGame
   end
 
   def print_file_prompt(files, changeset_id)
-    system "git show #{changeset_id}"
+    system "hg export #{changeset_id}"
     print("\n")
     files.each_with_index do |file, index|
       line = sprintf("%3d) #{file}", index+1)
@@ -105,10 +112,10 @@ class HgBlameGame
   def prompt_for_file_message(count)
     "Enter:\n" +
       "  - 'q' to quit, if you have found the offending commit\n" +
-      "  - the number from the above list (from 1 to #{count}) of the file to git blame chain into.\n" +
-      "  - the filepath to git blame chain into.\n" +
-      "  - 's' to git blame chain into the 'same' file as before\n" +
-      "  - 'r' to re-view the git show\n\n" +
+      "  - the number from the above list (from 1 to #{count}) of the file to chain into.\n" +
+      "  - the filepath to chain into.\n" +
+      "  - 's' to chain into the 'same' file as before\n" +
+      "  - 'r' to re-view the hg export\n\n" +
       simple_prompt
   end
 
@@ -118,9 +125,9 @@ class HgBlameGame
 
   def prompt_for_changeset_id_message(count)
     "Enter:\n" +
-      "  - the line number from the above list (from 1 to #{count}) you are git blaming.\n" +
-      "  - the changeset_id to git blame chain into.\n" +
-      "  - 'r' to re-view the git blame\n\n" + simple_prompt
+      "  - the line number from the above list (from 1 to #{count}) you are hg blaming.\n" +
+      "  - the changeset_id to chain into.\n" +
+      "  - 'r' to re-view the hg blame\n\n" + simple_prompt
   end
 
   def p_flush(str)
