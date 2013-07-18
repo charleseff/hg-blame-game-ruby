@@ -61,7 +61,7 @@ class HgBlameGame
   end
 
   def hg_blame_cmd
-    "hg  blame --rev #{@changeset_id} --verbose --user --line-number --changeset #{@path_to_file}"
+    "hg blame --rev #{@changeset_id} --verbose --user --line-number --changeset #{@path_to_file}"
   end
 
   HG_BLAME_REGEX = / ([^\: ]+):/
