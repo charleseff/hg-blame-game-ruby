@@ -1,25 +1,25 @@
 #!/usr/bin/env ruby
 $:.unshift(File.dirname(__FILE__) + '/../lib') unless $:.include?(File.dirname(__FILE__) + '/../lib')
-require 'git-blame-game'
+require 'hg-blame-game'
 
 aliases = %w(blame praise annotate ann)
 
 options = {}
 OptionParser.new do |opts|
   opts.banner = <<-END.gsub(/^[ \t]+/m, '')
-    Usage: git-blame-game [options] path/to/filename
+    Usage: hg-blame-game [options] path/to/filename
   END
 
   opts.separator ""
   opts.separator "Options:"
 
-  opts.on("-s", "--sha", "--SHA [SHA]", String, "Set initial SHA (defaults to HEAD)") do |sha|
-    options[:sha] = sha
+  opts.on("-r", "--rev", "--REV [REV]", String, "Set initial revision (defaults to tip)") do |rev|
+    options[:changeset_id] = rev
   end
 
   opts.on_tail("-h", "--help", "Show this message") do
     puts opts
-    puts "\nAliases: " + aliases.map{|a| ["git-#{a}-game", "git #{a}-game"]}.flatten.join(", ")
+    puts "\nAliases: " + aliases.map{|a| ["hg-#{a}-game", "hg #{a}-game"]}.flatten.join(", ")
     exit
   end
 
@@ -28,4 +28,4 @@ end.parse!
 path_to_file = ARGV[0]
 raise OptionParser::MissingArgument.new("You must specify a path to a file ") if not path_to_file
 
-GitBlameGame.new(path_to_file, options).run
+HgBlameGame.new(path_to_file, options).run

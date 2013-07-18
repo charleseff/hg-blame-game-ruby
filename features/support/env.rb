@@ -1,11 +1,9 @@
-# NOTE: these features assumes a standard install of git with no .gitconfig options, which may alter git output
-
 require 'aruba/cucumber'
 
-def unzip_git_repo_if_needed!
+def unzip_repo_if_needed!
   fixtures_dir = File.expand_path(File.dirname(__FILE__)) + '/../../test/fixtures'
-  unless File.directory? fixtures_dir + '/sample_git_repo'
-    `unzip #{fixtures_dir}/sample_git_repo.zip  -d #{fixtures_dir}`
+  unless File.directory? fixtures_dir + '/sample_hg_repo'
+    `unzip #{fixtures_dir}/sample_hg_repo.zip  -d #{fixtures_dir}`
   end
 end
 
@@ -16,6 +14,6 @@ def set_relative_dir_for_aruba!
 end
 
 Before do
-  unzip_git_repo_if_needed!
+  unzip_repo_if_needed!
   set_relative_dir_for_aruba!
 end

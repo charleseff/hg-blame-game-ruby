@@ -1,31 +1,34 @@
 Feature: The happy path
 
   Scenario: Happy path
-    Given I cd to "test/fixtures/sample_git_repo"
-    When I run `../../../bin/git-blame-game add.rb` interactively
+    Given I cd to "test/fixtures/sample_hg_repo"
+    When I run `../../../bin/hg-blame-game add.rb` interactively
     Then I should see:
     """
-      de2a1d78 (Carmen Cummings 2012-01-14 14:49:00 -0800 1) module Add
-      5087eab5 (Danny Dover     2012-01-14 14:50:06 -0800 2)   def add_4(y)
-      5087eab5 (Danny Dover     2012-01-14 14:50:06 -0800 3)     y + 5
-      de2a1d78 (Carmen Cummings 2012-01-14 14:49:00 -0800 4)   end
-      de2a1d78 (Carmen Cummings 2012-01-14 14:49:00 -0800 5) end
+      Carmen Cummings <developers+carmen@foo.com> c8769d6446bc:1: module Add
+           Danny Dover <developers+danny@foo.com> acb762f5f681:2:   def add_4(y)
+           Danny Dover <developers+danny@foo.com> acb762f5f681:3:     y + 5
+      Carmen Cummings <developers+carmen@foo.com> c8769d6446bc:4:   end
+      Carmen Cummings <developers+carmen@foo.com> c8769d6446bc:5: end
 
       (h for help) >
     """
     When I type "3"
     Then I should see:
     """
-      commit 5087eab56af9b0901a1b190de14f29867307c140
-      Author: Danny Dover <developers+danny@foo.com>
-      Date:   Sat Jan 14 14:50:06 2012 -0800
+      # HG changeset patch
+      # User Danny Dover <developers+danny@foo.com>
+      # Date 1326581406 28800
+      #      Sat Jan 14 14:50:06 2012 -0800
+      # Node ID acb762f5f681d31b710f49f563ba8d1562b9e4c2
+      # Parent  c8769d6446bc9adf5c0ad0394d87c31594f0cd2b
+      I like y's better
 
-          I like y's better
+      committer: Charles Finkel <charles.finkel@gmail.com>
 
-      diff --git a/add.rb b/add.rb
-      index 44be98f..898a812 100644
-      --- a/add.rb
-      +++ b/add.rb
+      diff -r c8769d6446bc -r acb762f5f681 add.rb
+      --- a/add.rb	Sat Jan 14 14:49:00 2012 -0800
+      +++ b/add.rb	Sat Jan 14 14:50:06 2012 -0800
       @@ -1,5 +1,5 @@
        module Add
       -  def add_4(x)
@@ -36,35 +39,37 @@ Feature: The happy path
        end
       \ No newline at end of file
 
-        1) add.rb (or 's' for same)
+        1) add.rb   (or 's' for same)
 
       (h for help) >
     """
     When I type "1"
     Then I should see:
     """
-      de2a1d78 (Carmen Cummings 2012-01-14 14:49:00 -0800 1) module Add
-      de2a1d78 (Carmen Cummings 2012-01-14 14:49:00 -0800 2)   def add_4(x)
-      de2a1d78 (Carmen Cummings 2012-01-14 14:49:00 -0800 3)     x + 5
-      de2a1d78 (Carmen Cummings 2012-01-14 14:49:00 -0800 4)   end
-      de2a1d78 (Carmen Cummings 2012-01-14 14:49:00 -0800 5) end
+      Carmen Cummings <developers+carmen@foo.com> c8769d6446bc:1: module Add
+      Carmen Cummings <developers+carmen@foo.com> c8769d6446bc:2:   def add_4(x)
+      Carmen Cummings <developers+carmen@foo.com> c8769d6446bc:3:     x + 5
+      Carmen Cummings <developers+carmen@foo.com> c8769d6446bc:4:   end
+      Carmen Cummings <developers+carmen@foo.com> c8769d6446bc:5: end
 
       (h for help) >
     """
     When I type "3"
     Then I should see:
     """
-      commit de2a1d78f80e02a515cdd3aa0420dd6ee35b510b
-      Author: Carmen Cummings <developers+carmen@foo.com>
-      Date:   Sat Jan 14 14:49:00 2012 -0800
+      # HG changeset patch
+      # User Carmen Cummings <developers+carmen@foo.com>
+      # Date 1326581340 28800
+      #      Sat Jan 14 14:49:00 2012 -0800
+      # Node ID c8769d6446bc9adf5c0ad0394d87c31594f0cd2b
+      # Parent  c043b110cc46389037e207f814d251f4c7e00a7b
+      moving add_4 to module
 
-          moving add_4 to module
+      committer: Charles Finkel <charles.finkel@gmail.com>
 
-      diff --git a/add.rb b/add.rb
-      new file mode 100644
-      index 0000000..44be98f
-      --- /dev/null
-      +++ b/add.rb
+      diff -r c043b110cc46 -r c8769d6446bc add.rb
+      --- /dev/null	Thu Jan 01 00:00:00 1970 +0000
+      +++ b/add.rb	Sat Jan 14 14:49:00 2012 -0800
       @@ -0,0 +1,5 @@
       +module Add
       +  def add_4(x)
@@ -72,10 +77,9 @@ Feature: The happy path
       +  end
       +end
       \ No newline at end of file
-      diff --git a/blah.rb b/blah.rb
-      index 0424947..38b7511 100644
-      --- a/blah.rb
-      +++ b/blah.rb
+      diff -r c043b110cc46 -r c8769d6446bc blah.rb
+      --- a/blah.rb	Sat Jan 14 14:46:53 2012 -0800
+      +++ b/blah.rb	Sat Jan 14 14:49:00 2012 -0800
       @@ -1,5 +1,5 @@
       -def add_4(x)
       -  x + 5
@@ -87,35 +91,36 @@ Feature: The happy path
        puts add_4(9) # should be 13
       \ No newline at end of file
 
-        1) add.rb (or 's' for same)
-        2) blah.rb
+        1) blah.rb
+        2) add.rb   (or 's' for same)
+    """
+    When I type "1"
+    Then I should see:
+    """
+      Alice Amos <developers+alice@foo.com> a37def2620e7:1: def add_4(x)
+        Bob Barker <developers+bob@foo.com> c043b110cc46:2:   x + 5
+      Alice Amos <developers+alice@foo.com> a37def2620e7:3: end
+      Alice Amos <developers+alice@foo.com> a37def2620e7:4:
+      Alice Amos <developers+alice@foo.com> a37def2620e7:5: puts add_4(9) # should be 13
 
       (h for help) >
     """
     When I type "2"
     Then I should see:
     """
-      ^f603a9a (Alice Amos 2012-01-14 14:46:18 -0800 1) def add_4(x)
-      63b41ee4 (Bob Barker 2012-01-14 14:46:53 -0800 2)   x + 5
-      ^f603a9a (Alice Amos 2012-01-14 14:46:18 -0800 3) end
-      ^f603a9a (Alice Amos 2012-01-14 14:46:18 -0800 4)
-      ^f603a9a (Alice Amos 2012-01-14 14:46:18 -0800 5) puts add_4(9) # should be 13
+      # HG changeset patch
+      # User Bob Barker <developers+bob@foo.com>
+      # Date 1326581213 28800
+      #      Sat Jan 14 14:46:53 2012 -0800
+      # Node ID c043b110cc46389037e207f814d251f4c7e00a7b
+      # Parent  a37def2620e7853b1c44aafc2b7ae528340c37aa
+      being bad
 
-      (h for help) >
-    """
-    When I type "2"
-    Then I should see:
-    """
-      commit 63b41ee41653991aa00ce9687e3f403efd4c29d4
-      Author: Bob Barker <developers+bob@foo.com>
-      Date:   Sat Jan 14 14:46:53 2012 -0800
+      committer: Charles Finkel <charles.finkel@gmail.com>
 
-          being bad
-
-      diff --git a/blah.rb b/blah.rb
-      index 626a42b..0424947 100644
-      --- a/blah.rb
-      +++ b/blah.rb
+      diff -r a37def2620e7 -r c043b110cc46 blah.rb
+      --- a/blah.rb	Sat Jan 14 14:46:18 2012 -0800
+      +++ b/blah.rb	Sat Jan 14 14:46:53 2012 -0800
       @@ -1,5 +1,5 @@
        def add_4(x)
       -  x + 4
@@ -125,7 +130,7 @@ Feature: The happy path
        puts add_4(9) # should be 13
       \ No newline at end of file
 
-        1) blah.rb (or 's' for same)
+        1) blah.rb   (or 's' for same)
 
       (h for help) >
     """
@@ -134,10 +139,9 @@ Feature: The happy path
     """
     The responsible commit is:
 
-    commit 63b41ee41653991aa00ce9687e3f403efd4c29d4
-    Author: Bob Barker <developers+bob@foo.com>
-    Date:   Sat Jan 14 14:46:53 2012 -0800
-
-        being bad
+    changeset:   1:c043b110cc46
+    user:        Bob Barker <developers+bob@foo.com>
+    date:        Sat Jan 14 14:46:53 2012 -0800
+    summary:     being bad
     """
 
