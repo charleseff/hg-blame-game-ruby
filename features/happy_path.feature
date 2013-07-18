@@ -1,7 +1,7 @@
 Feature: The happy path
 
   Scenario: Happy path
-    Given I cd to "test/fixtures/sample_git_repo"
+    Given I cd to "test/fixtures/sample_hg_repo"
     When I run `../../../bin/git-blame-game add.rb` interactively
     Then I should see:
     """

@@ -1,17 +1,17 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "git-blame-game/version"
+require "hg-blame-game/version"
 
 Gem::Specification.new do |s|
-  s.name        = "git-blame-game"
-  s.version     = Git::Blame::Game::VERSION
+  s.name        = "hg-blame-game"
+  s.version     = Hg::Blame::Game::VERSION
   s.authors     = ["Charles Finkel"]
   s.email       = ["charles.finkel@gmail.com"]
-  s.homepage    = "https://github.com/charleseff/git-blame-game"
-  s.summary     = %q{git-blame-game is an interactive command for chaining 'git blame' calls to get to the real culprit for the line of code you care about, when one `git blame` does not tell the whole story.}
-  s.description = %q{When one `git blame` is not enough}
+  s.homepage    = "https://github.com/charleseff/hg-blame-game"
+  s.summary     = %q{hg-blame-game is an interactive command for chaining 'hg blame' calls to get to the real culprit for the line of code you care about, when one `hg blame` does not tell the whole story.}
+  s.description = %q{When one `hg blame` is not enough}
 
-  s.rubyforge_project = "git-blame-game"
+  s.rubyforge_project = "hg-blame-game"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

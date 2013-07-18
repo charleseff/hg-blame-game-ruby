@@ -22,7 +22,7 @@ Feature: Other scenarios
     """
 
   Scenario: Invalid input on git blame view:
-    Given I cd to "test/fixtures/sample_git_repo"
+    Given I cd to "test/fixtures/sample_hg_repo"
     When I run `../../../bin/git-blame-game add.rb` interactively
     And I type "foobar"
     Then I should see:
@@ -36,7 +36,7 @@ Feature: Other scenarios
     """
 
   Scenario: Invalid input on git show view:
-    Given I cd to "test/fixtures/sample_git_repo"
+    Given I cd to "test/fixtures/sample_hg_repo"
     When I run `../../../bin/git-blame-game add.rb` interactively
     And I type "3"
     And I type "blah"
@@ -53,7 +53,7 @@ Feature: Other scenarios
     """
 
   Scenario: With a SHA:
-    Given I cd to "test/fixtures/sample_git_repo"
+    Given I cd to "test/fixtures/sample_hg_repo"
     When I run `../../../bin/git-blame-game blah.rb --sha=63b41ee41653991aa00ce9687e3f403efd4c29d4` interactively
     Then I should see:
     """
@@ -65,7 +65,7 @@ Feature: Other scenarios
     """
 
   Scenario: Entering the SHA instead of the number
-    Given I cd to "test/fixtures/sample_git_repo"
+    Given I cd to "test/fixtures/sample_hg_repo"
     When I run `../../../bin/git-blame-game add.rb` interactively
     When I type "5087eab5"
     Then I should see:
@@ -92,7 +92,7 @@ Feature: Other scenarios
     """
 
   Scenario: Entering 's' for the same file to git blame into
-    Given I cd to "test/fixtures/sample_git_repo"
+    Given I cd to "test/fixtures/sample_hg_repo"
     When I run `../../../bin/git-blame-game add.rb` interactively
     When I type "3"
     Then I should see:
@@ -110,7 +110,7 @@ Feature: Other scenarios
     """
 
   Scenario: Entering the filename for the file to git blame into:
-    Given I cd to "test/fixtures/sample_git_repo"
+    Given I cd to "test/fixtures/sample_hg_repo"
     When I run `../../../bin/git-blame-game add.rb` interactively
     When I type "3"
     Then I should see:
@@ -128,7 +128,7 @@ Feature: Other scenarios
     """
 
   Scenario: Re-viewing a git blame:
-    Given I cd to "test/fixtures/sample_git_repo"
+    Given I cd to "test/fixtures/sample_hg_repo"
     When I run `../../../bin/git-blame-game add.rb` interactively
     Then I should see:
     """
@@ -149,7 +149,7 @@ Feature: Other scenarios
     """
 
   Scenario: Re-viewing a git show:
-    Given I cd to "test/fixtures/sample_git_repo"
+    Given I cd to "test/fixtures/sample_hg_repo"
     When I run `../../../bin/git-blame-game add.rb` interactively
     And I type "3"
     Then I should see:
@@ -203,7 +203,7 @@ Feature: Other scenarios
     """
 
   Scenario: Getting help interactively for git blame:
-    Given I cd to "test/fixtures/sample_git_repo"
+    Given I cd to "test/fixtures/sample_hg_repo"
     When I run `../../../bin/git-blame-game add.rb` interactively
     Then I should see:
     """
@@ -221,7 +221,7 @@ Feature: Other scenarios
     """
 
   Scenario: Getting help interactively for git show:
-    Given I cd to "test/fixtures/sample_git_repo"
+    Given I cd to "test/fixtures/sample_hg_repo"
     When I run `../../../bin/git-blame-game add.rb` interactively
     And I type "3"
     Then I should see:

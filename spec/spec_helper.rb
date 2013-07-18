@@ -1,1 +1,1 @@
-require 'git-blame-game'
+require 'hg-blame-game'

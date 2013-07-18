@@ -1,4 +1,4 @@
-module Git
+module Hg
   module Blame
     module Game
       VERSION = "0.1.0"
