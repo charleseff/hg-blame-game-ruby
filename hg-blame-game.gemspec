@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = Hg::Blame::Game::VERSION
   s.authors     = ["Charles Finkel"]
   s.email       = ["charles.finkel@gmail.com"]
-  s.homepage    = "https://github.com/charleseff/hg-blame-game"
+  s.homepage    = "https://github.com/charleseff/hg-blame-game-ruby"
   s.summary     = %q{hg-blame-game is an interactive command for chaining 'hg blame' calls to get to the real culprit for the line of code you care about, when one `hg blame` does not tell the whole story.}
   s.description = %q{When one `hg blame` is not enough}
 
